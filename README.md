@@ -31,6 +31,7 @@ This project trains and serves text classifiers to detect computer-generated (fa
   - Single text prediction with confidence.
   - Batch CSV/TXT upload; auto-detects text column among `['text_', 'text', 'review', 'review_text', 'content', 'message', 'comment']`.
   - Buttons to fetch a random fake (`/get_fake_example`) or genuine (`/get_genuine_example`) sample from `test_data.csv`.
+![Screenshot](images/screenshot-2025-12-04-170251.png)
 
 
 ## Training & Checkpoints
