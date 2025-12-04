@@ -32,6 +32,7 @@ This project trains and serves text classifiers to detect computer-generated (fa
   - Batch CSV/TXT upload; auto-detects text column among `['text_', 'text', 'review', 'review_text', 'content', 'message', 'comment']`.
   - Buttons to fetch a random fake (`/get_fake_example`) or genuine (`/get_genuine_example`) sample from `test_data.csv`.
 
+
 ## Training & Checkpoints
 - Configure model and training args in `2.0 train.py`.
 - Checkpoints are saved under `results/` (e.g., `results/checkpoint-5307/`).
@@ -91,7 +92,4 @@ The following metrics are taken from `Model Notes.txt` in this repository.
 - Safe weights: models are loaded using `safetensors` where available to avoid `.bin` loading and related security issues.
 - Tokenizers: DeBERTa v3 slow tokenizer requires `sentencepiece`. Fast tokenizer may require `tiktoken` in some environments.
 - CSV columns: for UI robustness, upload files should include a recognizable text column (`text` or `text_` recommended) and a `label` column for example sampling.
-
-## License
-- For academic/research use. Add your preferred license here if you plan to distribute.
 
