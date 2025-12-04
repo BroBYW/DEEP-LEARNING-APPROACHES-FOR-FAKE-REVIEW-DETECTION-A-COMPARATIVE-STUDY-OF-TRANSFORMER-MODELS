@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments
+venv/
+.venv/
+myenv/
+
+# Logs and temp
+*.log
+*.tmp
+*.cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Model artifacts (large binaries)
+*.pt
+*.bin
+*.safetensors
+
+# Training checkpoints and runs
+results/
+mlruns/
+
+# Local trained models (do not version control)
+trained_model/
+debertatrained_model/
+robertatrained_model/
+distillberttrained_model/
+alberttrained_model/
+
+# NVIDIA CUDA/NCCL local package
+nvidia_nccl_cu12-2.21.5/
+
+# OS
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fake Review Detector</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .review-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .review-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-example {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 2px solid #bbdefb;
+        }
+
+        .btn-example:hover {
+            background: #bbdefb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .result-card {
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .result-genuine {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+        }
+
+        .result-fake {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 5px solid #dc3545;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confidence-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .confidence-genuine {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+
+        .confidence-fake {
+            background: linear-gradient(90deg, #dc3545, #fd7e14);
+        }
+
+        .detailed-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+        }
+
+        .batch-upload {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: #0056b3;
+        }
+
+        .batch-results {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .batch-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .batch-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #dee2e6;
+        }
+
+        .batch-item.fake {
+            border-left-color: #dc3545;
+        }
+
+        .batch-item.genuine {
+            border-left-color: #28a745;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .info-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .info-section p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .disclaimer strong {
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-card {
+                padding: 25px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-shield-alt"></i> AI Fake Review Detector</h1>
+            <p>Powered by Advanced RoBERTa AI Technology</p>
+        </div>
+
+        <div class="main-card">
+            <div class="input-section">
+                <div class="input-label">
+                    <i class="fas fa-edit"></i> Enter Review Text to Analyze
+                </div>
+                <textarea 
+                    id="reviewText" 
+                    class="review-textarea" 
+                    placeholder="Paste the review text here that you want to analyze for authenticity..."
+                ></textarea>
+            </div>
+
+            <div class="button-group">
+                <button id="analyzeBtn" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Review
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-eraser"></i> Clear Text
+                </button>
+                <button id="fakeExampleBtn" class="btn btn-example">
+                    <i class="fas fa-robot"></i> Try Fake Example
+                </button>
+                <button id="genuineExampleBtn" class="btn btn-example">
+                    <i class="fas fa-check-circle"></i> Try Genuine Example
+                </button>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing review with AI... Please wait</p>
+            </div>
+
+            <div id="results" class="results">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+
+        <!-- Batch Upload Section -->
+        <div class="main-card">
+            <h2><i class="fas fa-upload"></i> Batch Analysis</h2>
+            <p>Upload a CSV or TXT file containing multiple reviews for batch analysis.</p>
+            
+            <div class="batch-upload">
+                <div class="file-input-wrapper">
+                    <input type="file" id="batchFile" class="file-input" accept=".csv,.txt">
+                    <label for="batchFile" class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt"></i> Choose File
+                    </label>
+                </div>
+                <p><strong>Supported formats:</strong> CSV (with 'text_', 'text', 'review', or similar column), TXT (one review per line)</p>
+                <button id="uploadBtn" class="btn btn-primary" style="display: none;">
+                    <i class="fas fa-cogs"></i> Process File
+                </button>
+            </div>
+
+            <div id="batchResults" class="batch-results">
+                <!-- Batch results will be populated here -->
+            </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="info-section">
+            <h2><i class="fas fa-info-circle"></i> How It Works</h2>
+            <p>
+                Our AI-powered fake review detector uses a sophisticated <strong>RoBERTa (Robustly Optimized BERT Pretraining Approach)</strong> 
+                model that has been fine-tuned on thousands of authentic and fake reviews. The system analyzes various linguistic 
+                patterns, writing styles, and content characteristics to determine the authenticity of reviews.
+            </p>
+            <p>
+                The model can detect three types of content:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                <li><strong>Genuine Reviews (label):</strong> Authentic reviews written by real customers</li>
+                <li><strong>Computer Generated (CG):</strong> Reviews created by AI or automated systems (Fake)</li>
+                <li><strong>Original Review (OR):</strong> Authentic original reviews written by real customers</li>
+            </ul>
+            
+            <div class="disclaimer">
+                <strong><i class="fas fa-exclamation-triangle"></i> Disclaimer:</strong> 
+                This AI tool is designed to assist in identifying potentially fake reviews but may not be 100% accurate. 
+                The results should be used as a guide and not as definitive proof. Always use your judgment and consider 
+                multiple factors when evaluating review authenticity.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const reviewText = document.getElementById('reviewText');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const fakeExampleBtn = document.getElementById('fakeExampleBtn');
+        const genuineExampleBtn = document.getElementById('genuineExampleBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const batchFile = document.getElementById('batchFile');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const batchResults = document.getElementById('batchResults');
+
+        // Event listeners
+        analyzeBtn.addEventListener('click', analyzeReview);
+        clearBtn.addEventListener('click', clearText);
+        fakeExampleBtn.addEventListener('click', () => loadRandomExample('fake'));
+        genuineExampleBtn.addEventListener('click', () => loadRandomExample('genuine'));
+        batchFile.addEventListener('change', handleFileSelect);
+        uploadBtn.addEventListener('click', processBatchFile);
+
+        // Enter key support
+        reviewText.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                analyzeReview();
+            }
+        });
+
+        async function loadRandomExample(type) {
+            try {
+                // Show loading state on button
+                const button = type === 'fake' ? fakeExampleBtn : genuineExampleBtn;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                button.disabled = true;
+
+                // Fetch random example from backend
+                const endpoint = type === 'fake' ? '/get_fake_example' : '/get_genuine_example';
+                const response = await fetch(endpoint);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    reviewText.value = data.text;
+                    reviewText.focus();
+                    
+                    // Optional: Show a brief info about the loaded example
+                    console.log(`Loaded ${type} example from category: ${data.category}, rating: ${data.rating}`);
+                } else {
+                    const errorData = await response.json();
+                    alert(`Failed to load ${type} example: ${errorData.error}`);
+                }
+            } catch (error) {
+                console.error(`Error loading ${type} example:`, error);
+                alert(`Error loading ${type} example. Please try again.`);
+            } finally {
+                // Restore button state
+                const button = type === 'fake' ? fakeExampleBtn : genuineExampleBtn;
+                const originalIcon = type === 'fake' ? 'fa-times-circle' : 'fa-check-circle';
+                button.innerHTML = `<i class="fas ${originalIcon}"></i> Try ${type === 'fake' ? 'Fake' : 'Genuine'} Example`;
+                button.disabled = false;
+            }
+        }
+
+        function clearText() {
+            reviewText.value = '';
+            results.style.display = 'none';
+            reviewText.focus();
+        }
+
+        async function analyzeReview() {
+            const text = reviewText.value.trim();
+            
+            if (!text) {
+                alert('Please enter some review text to analyze.');
+                return;
+            }
+
+            // Show loading
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            analyzeBtn.disabled = true;
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                loading.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const isFake = data.result_type === 'fake';
+            const icon = isFake ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle';
+            const resultClass = isFake ? 'result-fake' : 'result-genuine';
+            const confidenceClass = isFake ? 'confidence-fake' : 'confidence-genuine';
+
+            results.innerHTML = `
+                <div class="result-card ${resultClass}">
+                    <div class="result-title">
+                        <i class="${icon}"></i>
+                        Result: ${data.description}
+                    </div>
+                    <p><strong>Confidence:</strong> We are ${data.confidence}% confident in this classification.</p>
+                    
+                    <div class="confidence-bar">
+                        <div class="confidence-fill ${confidenceClass}" style="width: ${data.confidence}%"></div>
+                    </div>
+                    
+                    <div class="detailed-results">
+                        <h4>Detailed Breakdown:</h4>
+                        ${Object.entries(data.all_probabilities).map(([label, prob]) => 
+                            `<p><strong>${label}:</strong> ${prob}%</p>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            
+            results.style.display = 'block';
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadBtn.style.display = 'inline-flex';
+                uploadBtn.innerHTML = `<i class="fas fa-cogs"></i> Process "${file.name}"`;
+            } else {
+                uploadBtn.style.display = 'none';
+            }
+        }
+
+        async function processBatchFile() {
+            const file = batchFile.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                const response = await fetch('/batch_upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayBatchResults(data);
+                } else {
+                    throw new Error(data.error || 'Batch processing failed');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = `<i class="fas fa-cogs"></i> Process "${file.name}"`;
+            }
+        }
+
+        function displayBatchResults(data) {
+            const fakeCount = data.results.filter(r => r.result_type === 'fake').length;
+            const genuineCount = data.results.filter(r => r.result_type === 'genuine').length;
+
+            let resultsHTML = `
+                <div class="batch-summary">
+                    <h3><i class="fas fa-chart-bar"></i> Analysis Summary</h3>
+                    <p><strong>Total Reviews Processed:</strong> ${data.total_processed}</p>
+                    <p><strong>Genuine Reviews:</strong> ${genuineCount} (${((genuineCount/data.total_processed)*100).toFixed(1)}%)</p>
+                    <p><strong>Fake Reviews:</strong> ${fakeCount} (${((fakeCount/data.total_processed)*100).toFixed(1)}%)</p>
+                    <button id="downloadBtn" class="btn btn-primary" style="margin-top: 15px;">
+                        <i class="fas fa-download"></i> Download Results CSV
+                    </button>
+                </div>
+                <div style="max-height: 400px; overflow-y: auto;">
+            `;
+
+            data.results.forEach(result => {
+                resultsHTML += `
+                    <div class="batch-item ${result.result_type}">
+                        <strong>Review #${result.index}:</strong> ${result.text}<br>
+                        <strong>Result:</strong> ${result.description} (${result.confidence}% confidence)
+                    </div>
+                `;
+            });
+
+            resultsHTML += '</div>';
+            batchResults.innerHTML = resultsHTML;
+            batchResults.style.display = 'block';
+
+            // Add download functionality
+            document.getElementById('downloadBtn').addEventListener('click', () => downloadResults(data.results));
+        }
+
+        async function downloadResults(results) {
+            try {
+                const response = await fetch('/download_results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ results: results })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `fake_review_detection_results_${new Date().toISOString().slice(0,10)}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    throw new Error('Download failed');
+                }
+            } catch (error) {
+                alert('Error downloading results: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

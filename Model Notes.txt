@@ -1,0 +1,107 @@
+A. BERT-base-uncased
+i. PATH= "./trained_model"
+ii. Training Result= {'train_runtime': 11047.493, 'train_samples_per_second': 2561938720442.813, 'train_steps_per_second': 320253654839.652, 'train_loss': 0.05022529705339024, 'epoch': 6.0}
+iii. Accuracy: 0.9799
+Precision per class: {'label': np.float64(0.0), 'CG': np.float64(0.9733377221856484), 'OR': np.float64(0.9864597093791282)}
+Recall per class: {'label': np.float64(0.0), 'CG': np.float64(0.9866533199866533), 'OR': np.float64(0.9735984354628422)}
+F1-score per class: {'label': np.float64(0.0), 'CG': np.float64(0.9799502899751449), 'OR': np.float64(0.97998687664042)}
+True Negative Rate per class: {'label': np.float64(1.0), 'CG': np.float64(0.9736070381231672), 'OR': np.float64(0.986324216144096)}
+
+B. RoBERTa-base
+i. PATH =  "./robertatrained_model"
+ii. {'train_runtime': 28752.7887, 'train_samples_per_second': 984356692604.931, 'train_steps_per_second': 123048933980.011, 'train_loss': 0.045298849315622336, 'epoch': 16.0}
+iii. Accuracy: 0.9868
+Precision per class: {'label': np.float64(0.0), 'CG': np.float64(0.9866533199866533), 'OR': np.float64(0.9869664385793419)}
+Recall per class: {'label': np.float64(0.0), 'CG': np.float64(0.9866533199866533), 'OR': np.float64(0.9872881355932204)}
+F1-score per class: {'label': np.float64(0.0), 'CG': np.float64(0.9866533199866533), 'OR': np.float64(0.9871272608766499)}
+True Negative Rate per class: {'label': np.float64(1.0), 'CG': np.float64(0.9869664385793419), 'OR': np.float64(0.9866577718478986)}
+
+C. DistillBERT-base-uncased
+i. PATH = "./distillberttrained_model"
+ii. {'train_runtime': 11630.9812, 'train_samples_per_second': 2433414646998.497, 'train_steps_per_second': 304187578033.448, 'train_loss': 0.030864126769810978, 'epoch': 12.0}
+iii. Accuracy: 0.9847
+Precision per class: {'label': np.float64(1.0), 'CG': np.float64(0.9859437751004017), 'OR': np.float64(0.9834254143646409)}
+Recall per class: {'label': np.float64(1.0), 'CG': np.float64(0.982982982982983), 'OR': np.float64(0.9863102998696219)}
+F1-score per class: {'label': np.float64(1.0), 'CG': np.float64(0.9844611528822056), 'OR': np.float64(0.9848657445077299)}
+True Negative Rate per class: {'label': np.float64(1.0), 'CG': np.float64(0.9863147605083089), 'OR': np.float64(0.9829886591060707)}
+
+D. ALBERT-base-v2
+i. PATH = "./alberttrained_model"
+ii. {'train_runtime': 22484.1535, 'train_samples_per_second': 1258797665540.121, 'train_steps_per_second': 157355267663.532, 'train_loss': 0.06493155162469019, 'epoch': 12.0}
+iii. Accuracy: 0.9758
+Precision per class: {'label': np.float64(0.0), 'CG': np.float64(0.9870174239836009), 'OR': np.float64(0.9652755654667091)}
+Recall per class: {'label': np.float64(0.0), 'CG': np.float64(0.963963963963964), 'OR': np.float64(0.9876140808344198)}
+F1-score per class: {'label': np.float64(0.0), 'CG': np.float64(0.9753544902093181), 'OR': np.float64(0.9763170613823102)}
+True Negative Rate per class: {'label': np.float64(1.0), 'CG': np.float64(0.9876140808344198), 'OR': np.float64(0.9636424282855237)}
+
+E. DeBERTa-v3-basei
+i. PATH = "./debertatrained_model"
+ii. {'train_runtime': 20761.8675, 'train_samples_per_second': 1363220333658.694, 'train_steps_per_second': 85204281180.166, 'train_loss': 0.04072676135825855, 'epoch': 7.0}
+iii. Accuracy: 0.9817
+Precision per class: {'CG': np.float64(0.0), 'OR': np.float64(0.9746793817823084)}
+Recall per class: {'CG': np.float64(0.0), 'OR': np.float64(0.988988988988989)}
+F1-score per class: {'CG': np.float64(0.0), 'OR': np.float64(0.9817820470354421)}
+True Negative Rate per class: {'CG': np.float64(0.9749022164276402), 'OR': np.float64(0.988988988988989)}
+
+F. Naive Bayes Accuracy Score ->  84.01483924154988
+Naive Bayes Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.82      0.87      0.85      6063
+           1       0.87      0.81      0.83      6067
+
+    accuracy                           0.84     12130
+   macro avg       0.84      0.84      0.84     12130
+weighted avg       0.84      0.84      0.84     12130
+
+G. Naive Bayes True Negative Rate (Specificity): 0.8743196437407225
+SVM Accuracy Score ->  85.92745259686727
+SVM Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.86      0.86      0.86      6063
+           1       0.86      0.86      0.86      6067
+
+    accuracy                           0.86     12130
+   macro avg       0.86      0.86      0.86     12130
+weighted avg       0.86      0.86      0.86     12130
+
+H. SVM True Negative Rate (Specificity): 0.8634339435922811
+KNN Accuracy Score ->  58.623248145094806
+KNN Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.55      0.96      0.70      6063
+           1       0.84      0.21      0.34      6067
+
+    accuracy                           0.59     12130
+   macro avg       0.69      0.59      0.52     12130
+weighted avg       0.69      0.59      0.52     12130
+
+I. KNN True Negative Rate (Specificity): 0.9587662873165099
+Random Forest Accuracy Score ->  83.5696619950536
+Random Forest Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.82      0.87      0.84      6063
+           1       0.86      0.81      0.83      6067
+
+    accuracy                           0.84     12130
+   macro avg       0.84      0.84      0.84     12130
+weighted avg       0.84      0.84      0.84     12130
+
+J. CNN 
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.94      0.94      0.94      2997
+           1       0.94      0.94      0.94      3068
+
+    accuracy                           0.94      6065
+   macro avg       0.94      0.94      0.94      6065
+weighted avg       0.94      0.94      0.94      6065
+
+
+Confusion Matrix:
+True Negative Rate (TNR): 0.94
