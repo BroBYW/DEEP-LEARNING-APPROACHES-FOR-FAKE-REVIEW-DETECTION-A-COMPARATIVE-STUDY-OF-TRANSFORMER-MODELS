@@ -497,6 +497,17 @@
             reviewText.focus();
         }
 
+        function escapeHTML(str) {
+            if (str == null) return '';
+            return String(str).replace(/[&<>"']/g, (ch) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[ch]);
+        }
+
         async function analyzeReview() {
             const text = reviewText.value.trim();
             
@@ -625,8 +636,8 @@
             data.results.forEach(result => {
                 resultsHTML += `
                     <div class="batch-item ${result.result_type}">
-                        <strong>Review #${result.index}:</strong> ${result.text}<br>
-                        <strong>Result:</strong> ${result.description} (${result.confidence}% confidence)
+                        <strong>Review #${result.index}:</strong> ${escapeHTML(result.text)}<br>
+                        <strong>Result:</strong> ${escapeHTML(result.description)} (${result.confidence}% confidence)
                     </div>
                 `;
             });
