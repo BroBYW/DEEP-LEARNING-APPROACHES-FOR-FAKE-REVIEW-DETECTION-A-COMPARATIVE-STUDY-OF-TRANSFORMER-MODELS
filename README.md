@@ -44,27 +44,27 @@ The following metrics are taken from `Model Notes.txt` in this repository.
 ### Transformer Models
 - **BERT-base-uncased** (`./trained_model`)
   - Accuracy: `0.9799`
-  - Train loss: `0.0502`, Epochs: `6`
+  - Train loss: `0.0502`
   - TNR per class: `{'label': 1.0, 'CG': 0.9736, 'OR': 0.9863}`
 
 - **RoBERTa-base** (`./robertatrained_model`)
   - Accuracy: `0.9868`
-  - Train loss: `0.0453`, Epochs: `16`
+  - Train loss: `0.0453`
   - TNR per class: `{'label': 1.0, 'CG': 0.9870, 'OR': 0.9867}`
 
 - **DistilBERT-base-uncased** (`./distillberttrained_model`)
   - Accuracy: `0.9847`
-  - Train loss: `0.0309`, Epochs: `12`
+  - Train loss: `0.0309`
   - TNR per class: `{'label': 1.0, 'CG': 0.9863, 'OR': 0.9830}`
 
 - **ALBERT-base-v2** (`./alberttrained_model`)
   - Accuracy: `0.9758`
-  - Train loss: `0.0649`, Epochs: `12`
+  - Train loss: `0.0649`
   - TNR per class: `{'label': 1.0, 'CG': 0.9876, 'OR': 0.9636}`
 
 - **DeBERTa-v3-base** (`./debertatrained_model`)
   - Accuracy: `0.9817`
-  - Train loss: `0.0407`, Epochs: `7`
+  - Train loss: `0.0407`
   - TNR per class: `{'CG': 0.9749, 'OR': 0.9890}`
 
 ### Classical Baselines
