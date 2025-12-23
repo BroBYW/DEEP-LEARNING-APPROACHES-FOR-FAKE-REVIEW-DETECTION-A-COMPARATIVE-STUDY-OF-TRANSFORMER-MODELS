@@ -90,18 +90,15 @@ Random Forest Classification Report:
    macro avg       0.84      0.84      0.84     12130
 weighted avg       0.84      0.84      0.84     12130
 
-J. CNN 
+J.  LSTM (RNN)
 
-Classification Report:
               precision    recall  f1-score   support
 
-           0       0.94      0.94      0.94      2997
-           1       0.94      0.94      0.94      3068
+           0       0.87      0.88      0.87      3006
+           1       0.88      0.87      0.87      3059
 
-    accuracy                           0.94      6065
-   macro avg       0.94      0.94      0.94      6065
-weighted avg       0.94      0.94      0.94      6065
+    accuracy                           0.87      6065
+   macro avg       0.87      0.87      0.87      6065
+weighted avg       0.87      0.87      0.87      6065
 
-
-Confusion Matrix:
-True Negative Rate (TNR): 0.94
+True Negative Rate (Specificity): 0.8815701929474384
